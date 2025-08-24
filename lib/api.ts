@@ -3,7 +3,7 @@ import type { Note, NewNoteData} from '../types/note';
 
 
 
-const BASE_URL = "https://notehub-public.goit.study/api";
+const BASE_URL = "https://notehub-api.goit.study";
 const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
 const noteServiceClient = axios.create({
