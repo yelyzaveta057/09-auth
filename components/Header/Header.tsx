@@ -1,7 +1,7 @@
 import css from "./Header.module.css";
 import React from "react";
 import Link from "next/link";
-import { TagsMenu } from "../TagsMenu/TagsMenu";
+import AuthNavigation from "../AuthNavigation/AuthNavigation";
 
 
 
@@ -14,11 +14,11 @@ const Header = async () => {
   </Link>
   <nav aria-label="Main Navigation">
     <ul className={css.navigation}>
-      <li>
+      {/* <li>
         <Link href="/">Home</Link>
-      </li>
+      </li> */}
       <li>
-        <TagsMenu />
+        <AuthNavigation />
       </li>
     </ul>
   </nav>
