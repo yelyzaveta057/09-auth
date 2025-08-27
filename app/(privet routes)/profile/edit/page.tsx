@@ -1,59 +1,85 @@
-import { Metadata } from "next";
+"use client";
 
-import Link from "next/link";
-import Image from "next/image";
+import { updateProfile } from "@/lib/api/clientApi";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getMe } from "@/lib/api/clientApi";
+import { useAuthStore } from "@/lib/store/authStore";
+import css from "./EditProfilePage.module.css"
 
-import css from "./ProfilePage.module.css";
+const EditProfile = () => {
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
 
-import { getServerMe } from "../../../lib/api/serverApi";
+  const [loading, setLoading] = useState(true);
 
-export const metadata: Metadata = {
-  title: "User Profile",
-  description:
-    "View and manage your personal information, notes, and settings in your profile.",
-  openGraph: {
-    title: "User Profile",
-    description:
-      "View and manage your personal information, notes, and settings in your profile.",
-    url: "/profile",
-    images: [
-      {
-        url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
-        width: 1200,
-        height: 630,
-        alt: "User profile preview",
-      },
-    ],
-  },
-};
+  const setUser = useAuthStore((state) => state.setUser);
 
-const ProfilePage = async () => {
-  const user = await getServerMe();
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await getMe();
+        if (user) {
+          setUsername(user.username || "");
+          setEmail(user.email);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const data = await updateProfile({ username });
+    if (data) {
+      setUser(data);
+      router.push("/profile");
+    }
+  };
+
+  const handleCancel = () => router.back();
+
+  if (loading) return <p>Loading...</p>;
+
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
-        <div className={css.header}>
-          <h1 className={css.formTitle}>Profile Page</h1>
-          <Link href="profile/edit" className={css.editProfileButton}>
-            Edit Profile
-          </Link>
-        </div>
-        <div className={css.avatarWrapper}>
-          <Image
-            src={user.avatar}
-            alt="User Avatar"
-            width={120}
-            height={120}
-            className={css.avatar}
-          />
-        </div>
-        <div className={css.profileInfo}>
-          <p>Username: {user ? user.username : "undefined"}</p>
-          <p>Email: {user ? user.email : "undefined"}</p>
-        </div>
+        <h1 className={css.formTitle}>Edit Profile</h1>
+
+        <form onSubmit={handleSubmit} className={css.profileInfo}>
+          <div className={css.usernameWrapper}>
+            <label htmlFor="username">Username:</label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className={css.input}
+            />
+          </div>
+
+          <p>Email: {email}</p>
+
+          <div className={css.actions}>
+            <button type="submit" className={css.saveButton}>
+              Save
+            </button>
+            <button
+              type="button"
+              className={css.cancelButton}
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </main>
   );
 };
 
-export default ProfilePage;
+export default EditProfile;

@@ -1,6 +1,6 @@
 
 import type { Note, NewNoteData} from '../../types/note';
-import { nextServer} from "./api"
+import { apiServer } from "./api";
 import type {
   User,
   RegisterRequest,
@@ -29,7 +29,7 @@ export const fetchNotes = async (
   }
 if (tag) params.tag = tag;
 
-  const response = await nextServer.get<NotesHttpResponse>('/notes', { params });
+  const response = await apiServer.get<NotesHttpResponse>('/notes', { params });
 
   return response.data;
 };
@@ -37,17 +37,17 @@ if (tag) params.tag = tag;
 
 
 export const fetchNoteById = async (id: string): Promise<Note> => {
-  const res = await nextServer.get<Note>(`/notes/${id}`);
+  const res = await apiServer.get<Note>(`/notes/${id}`);
   return res.data;
 };
 
 export const createNote = async (noteData: NewNoteData): Promise<Note> => {
-  const res = await nextServer.post<Note>('/notes', noteData);
+  const res = await apiServer.post<Note>('/notes', noteData);
   return res.data;
 };
 
 export const deleteNote = async (noteId: string): Promise<Note> => {
-  const res = await nextServer.delete<Note>(`/notes/${noteId}`);
+  const res = await apiServer.delete<Note>(`/notes/${noteId}`);
   return res.data;
 };
 
@@ -55,39 +55,39 @@ export const deleteNote = async (noteId: string): Promise<Note> => {
 //register
 
 export const register = async (data: RegisterRequest) => {
-  const res = await nextServer.post<User>("/auth/register", data);
+  const res = await apiServer.post<User>("/auth/register", data);
   return res.data;
 };
 
 //login
 
 export const login = async (data: LoginRequest) => {
-  const res = await nextServer.post<User>("/auth/login", data);
+  const res = await apiServer.post<User>("/auth/login", data);
   return res.data;
 };
 
 //checkSession
 
 export const checkSession = async () => {
-  const res = await nextServer.get<CheckSessionRequest>("/auth/session");
+  const res = await apiServer.get<CheckSessionRequest>("/auth/session");
   return res.data.success;
 };
 
 //getMe
 
 export const getMe = async () => {
-  const { data } = await nextServer.get<User>("/users/me");
+  const { data } = await apiServer.get<User>("/users/me");
   return data;
 };
 
 //updateProfile
 export const updateProfile = async (data: { username: string }) => {
-  const res = await nextServer.patch<User>("/users/me", data);
+  const res = await apiServer.patch<User>("/users/me", data);
   return res.data;
 };
 
 //logout
 
 export const logout = async (): Promise<void> => {
-  await nextServer.post("/auth/logout");
+  await apiServer.post("/auth/logout");
 };
