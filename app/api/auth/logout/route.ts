@@ -17,10 +17,18 @@ export async function POST() {
       },
     });
 
-    cookieStore.delete('accessToken');
-    cookieStore.delete('refreshToken');
+    const response = NextResponse.json({ message: 'Logged out successfully' }, { status: 200 });
+    
+    response.cookies.set('accessToken', '', {
+      expires: new Date(0),
+      path: '/',
+    });
+    response.cookies.set('refreshToken', '', {
+      expires: new Date(0),
+      path: '/',
+    });
 
-    return NextResponse.json({ message: 'Logged out successfully' }, { status: 200 });
+    return response;
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);
