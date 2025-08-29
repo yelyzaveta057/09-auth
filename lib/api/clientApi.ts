@@ -19,10 +19,10 @@ export const fetchNotes = async (
   perPage: number = 12,
   tag?: string,
 ): Promise<NotesHttpResponse> => {
-  const params: Record<string, string> = {
+  const params: Record<string, string> = ({
     page: page.toString(),
     perPage: perPage.toString(),
-  };
+  });
 
   if (query.trim()) {
     params.search = query;

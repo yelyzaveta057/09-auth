@@ -1,15 +1,8 @@
-// INITIAL
 
 import { apiServer } from "./api";
-
-// COOKIES
-
 import { cookies } from "next/headers";
-
-// TYPES
-
 import { Note, NewNoteData } from "../../types/note";
-import { User } from "../../types/user";
+import type { User } from "../../types/user";
 
 interface NotesHttpResponse {
   notes: Note[];
