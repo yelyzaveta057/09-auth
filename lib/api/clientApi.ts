@@ -6,7 +6,7 @@ import type {
   RegisterRequest,
   LoginRequest,
   CheckSessionRequest,
-} from "@/types/user";
+} from "../../types/user";
 
 export interface NotesHttpResponse {
   notes: Note[];
@@ -46,7 +46,7 @@ export const createNote = async (noteData: NewNoteData): Promise<Note> => {
   return res.data;
 };
 
-export const deleteNote = async (noteId: string): Promise<Note> => {
+export const deleteNote = async (noteId: string) => {
   const res = await apiServer.delete<Note>(`/notes/${noteId}`);
   return res.data;
 };
@@ -76,8 +76,8 @@ export const checkSession = async () => {
 //getMe
 
 export const getMe = async () => {
-  const { data } = await apiServer.get<User>("/users/me");
-  return data;
+  const res = await apiServer.get<User>("/users/me");
+  return res.data;
 };
 
 //updateProfile
