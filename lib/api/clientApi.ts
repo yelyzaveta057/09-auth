@@ -2,11 +2,25 @@
 import type { Note, NewNoteData} from '../../types/note';
 import { apiServer } from "./api";
 import type {
-  User,
-  RegisterRequest,
-  LoginRequest,
-  CheckSessionRequest,
+  User
 } from "../../types/user";
+
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
+
+export type CheckSessionRequest = {
+  success: boolean;
+};
+
+export type RegisterRequest = {
+  email: string;
+  password?: string;
+  avatar?: string;
+  username: string;
+};
+
 
 export interface NotesHttpResponse {
   notes: Note[];

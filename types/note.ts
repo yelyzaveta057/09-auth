@@ -21,3 +21,4 @@ export type NoteListResponse = {
   notes: Note[];
   total: number;
 };
+
