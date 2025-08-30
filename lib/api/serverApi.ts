@@ -104,3 +104,8 @@ export const checkSession = async () => {
   });
   return response;
 };
+
+export const fetchNoteById = async (id: string): Promise<Note> => {
+  const res = await apiServer.get<Note>(`/notes/${id}`);
+  return res.data;
+};

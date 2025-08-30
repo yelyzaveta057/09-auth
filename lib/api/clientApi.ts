@@ -36,10 +36,7 @@ if (tag) params.tag = tag;
 
 
 
-export const fetchNoteById = async (id: string): Promise<Note> => {
-  const res = await apiServer.get<Note>(`/notes/${id}`);
-  return res.data;
-};
+
 
 export const createNote = async (noteData: NewNoteData): Promise<Note> => {
   const res = await apiServer.post<Note>('/notes', noteData);

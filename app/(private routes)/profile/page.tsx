@@ -75,7 +75,7 @@ const ProfilePage = async () => {
       </main>
     );
   } catch (error) {
-    // Handle authentication errors gracefully
+    
     console.error("Profile page error:", error);
     
     return (

@@ -22,9 +22,3 @@ export type LoginRequest = {
 export type CheckSessionRequest = {
   success: boolean;
 };
-
-export type UpdateUserRequest = {
-  username: string;
-  email?: string;
-  avatar: string;
-};
