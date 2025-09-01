@@ -1,58 +1,60 @@
 "use client";
-import { useState } from "react";;
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 
 import { useAuthStore } from "../../../../lib/store/authStore";
 
 
-
 import css from "./EditProfilePage.module.css";
-import Image from "next/image";
 import { editProfile } from "@/lib/api/serverApi";
 
 export type UpdateUserRequest = {
   username: string;
-  email?: string;
+  email: string;
   avatar: string;
 };
 
 export default function EditPage() {
   const router = useRouter();
   const { user } = useAuthStore();
+  const setUser = useAuthStore((s) => s.setUser);
+
   const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
 
-  const setUser = useAuthStore((state) => state.setUser);
+  async function onEditAction(formData: FormData) {
+    setError("");
 
-  const hundleEditProfile = async (formData: FormData) => {
+    const username = String(formData.get("username") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const avatar = String(formData.get("avatar") ?? "").trim();
+
+    const payload: UpdateUserRequest = { username, email, avatar };
+
     try {
-      const formValues = Object.fromEntries(formData) as UpdateUserRequest;
-      console.log(formValues);
+      const updated = await editProfile(payload);
 
-      const res = await editProfile(formValues);
-      // Виконуємо редірект або відображаємо помилку
-      if (res) {
-        setUser(res);
-
-        router.push("/profile");
-      } else {
-        setError("Invalid email or password");
+      if (!updated) {
+        setError("Failed to update profile.");
+        return;
       }
-    } catch (error) {
-      console.log("error", error);
-      setError("Invalid email or password");
-    }
-  };
 
-const handleCancel = () => {
-router.back(); 
-};
+      setUser(updated);
+      router.push("/profile");
+    } catch (e) {
+      console.error("editProfile error:", e);
+      setError("Failed to update profile.");
+    }
+  }
+
+  const handleCancel = () => router.back();
 
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
-        <div className={css.avatar}>{/* <AvatarPicker /> */}</div>
+
         {user && (
           <Image
             src={user.avatar}
@@ -62,12 +64,9 @@ router.back();
             className={css.avatar}
           />
         )}
+
         <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.currentTarget);
-            await hundleEditProfile(formData);
-          }}
+          action={(fd) => startTransition(() => onEditAction(fd))}
           className={css.profileInfo}
         >
           <div className={css.usernameWrapper}>
@@ -77,23 +76,41 @@ router.back();
               name="username"
               type="text"
               className={css.input}
-               placeholder={user?.username}
+              defaultValue={user?.username ?? ""}
               required
             />
           </div>
 
-          <p>Email: {user?.email}</p>
+          <div className={css.usernameWrapper}>
+            <label htmlFor="email">Email:</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              className={css.input}
+              defaultValue={user?.email ?? ""}
+              required
+            />
+          </div>
+
+          <input type="hidden" name="avatar" value={user?.avatar ?? ""} />
 
           <div className={css.actions}>
-            <button type="submit" className={css.saveButton}>
-              Save
+            <button type="submit" className={css.saveButton} disabled={isPending}>
+              {isPending ? "Saving..." : "Save"}
             </button>
-            <button type="button" onClick={handleCancel} className={css.cancelButton}>
-                Cancel
+            <button
+              type="button"
+              onClick={handleCancel}
+              className={css.cancelButton}
+              disabled={isPending}
+            >
+              Cancel
             </button>
           </div>
         </form>
-        {error && <p>{error}</p>}
+
+        {error && <p role="alert" className={css.error}>{error}</p>}
       </div>
     </main>
   );
