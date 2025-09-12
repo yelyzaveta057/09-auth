@@ -9,7 +9,7 @@ interface NotesHttpResponse {
   totalPages: number;
 }
 
-// GET NOTES
+
 
 export const getServerNotes = async (
   query: string,
@@ -33,7 +33,7 @@ export const getServerNotes = async (
   return response.data;
 };
 
-// POST FETCH
+
 
 export const createServerNote = async (newNote: NewNoteData): Promise<Note> => {
   const cookieStore = await cookies();
@@ -45,7 +45,7 @@ export const createServerNote = async (newNote: NewNoteData): Promise<Note> => {
   return response.data;
 };
 
-// FETCH NOTE BY ID
+
 
 export const fetchServerNoteById = async (id: string): Promise<Note> => {
   const cookieStore = await cookies();
@@ -57,7 +57,7 @@ export const fetchServerNoteById = async (id: string): Promise<Note> => {
   return response.data;
 };
 
-// DELETE POST
+
 
 export const deleteServerNote = async (id: string) => {
   const cookieStore = await cookies();
@@ -69,7 +69,7 @@ export const deleteServerNote = async (id: string) => {
   return response.data;
 };
 
-// EDIT PROFILE
+
 
 export const editProfile = async (data: User) => {
   const cookieStore = await cookies();
@@ -81,7 +81,7 @@ export const editProfile = async (data: User) => {
   return res.data;
 };
 
-// PRIVAT USER
+
 
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
@@ -93,7 +93,7 @@ export const getServerMe = async (): Promise<User> => {
   return data;
 };
 
-// CHECK SESSION
+
 
 export const checkSession = async () => {
   const cookieStore = await cookies();
