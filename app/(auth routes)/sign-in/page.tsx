@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { LoginRequest } from "../../../types/user";
-import { login } from "../../../lib/api/clientApi";
+
+import { login, LoginRequest } from "../../../lib/api/clientApi";
 import { useAuthStore } from "@/lib/store/authStore"
 
 import css from "./SignInPage.module.css"
+import { useRouter } from "next/router";
 
 const SignIn = () => {
   const router = useRouter();
