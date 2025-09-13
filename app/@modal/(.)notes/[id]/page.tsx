@@ -8,6 +8,7 @@ import { fetchNoteById } from "@/lib/api/clientApi";
 
 
 
+
 type Props = {
   params: Promise<{ id: string }>;
 };
