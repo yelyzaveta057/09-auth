@@ -1,7 +1,9 @@
 "use client";
-import { CheckSessionRequest, LoginRequest, RegisterRequest, UpdateUserRequest, User } from "@/types/user";
+
 import { nextServer } from "./api";
-import { NewNoteData, Note } from "@/types/note";
+import { NewNoteData, Note } from "../../types/note";
+import { CheckSessionRequest, LoginRequest, RegisterRequest, UpdateUserRequest, User } from "../../types/user";
+
 
 
 export interface NotesHttpResponse {
