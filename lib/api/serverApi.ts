@@ -1,8 +1,8 @@
 
-import { apiServer } from "./api";
 import { cookies } from "next/headers";
 import { Note, NewNoteData } from "../../types/note";
-import type { User } from "../../types/user";
+import { User } from "../../types/user";
+import { nextServer } from "./api";
 
 interface NotesHttpResponse {
   notes: Note[];
@@ -23,7 +23,7 @@ export const getServerNotes = async (
   });
   const cookieStore = await cookies();
 
-  const response = await apiServer.get("/notes", {
+  const response = await nextServer.get("/notes", {
     params: PARAMS,
     headers: {
       Cookie: cookieStore.toString(),
@@ -37,31 +37,28 @@ export const getServerNotes = async (
 
 export const createServerNote = async (newNote: NewNoteData): Promise<Note> => {
   const cookieStore = await cookies();
-  const response = await apiServer.post("/notes", newNote, {
+  const response = await nextServer.post("/notes", newNote, {
     headers: {
       Cookie: cookieStore.toString(),
     },
   });
   return response.data;
 };
-
-
 
 export const fetchServerNoteById = async (id: string): Promise<Note> => {
   const cookieStore = await cookies();
-  const response = await apiServer.get(`/notes/${id}`, {
+  const response = await nextServer.get(`/notes/${id}`, {
     headers: {
       Cookie: cookieStore.toString(),
     },
   });
   return response.data;
 };
-
 
 
 export const deleteServerNote = async (id: string) => {
   const cookieStore = await cookies();
-  const response = await apiServer.delete<Note>(`/notes/${id}`, {
+  const response = await nextServer.delete<Note>(`/notes/${id}`, {
     headers: {
       Cookie: cookieStore.toString(),
     },
@@ -73,7 +70,7 @@ export const deleteServerNote = async (id: string) => {
 
 export const editProfile = async (data: User) => {
   const cookieStore = await cookies();
-  const res = await apiServer.patch("/users/me", data, {
+  const res = await nextServer.patch("/users/me", data, {
     headers: {
       Cookie: cookieStore.toString(),
     },
@@ -85,7 +82,7 @@ export const editProfile = async (data: User) => {
 
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
-  const { data } = await apiServer.get("/users/me", {
+  const { data } = await nextServer.get("/users/me", {
     headers: {
       Cookie: cookieStore.toString(),
     },
@@ -97,15 +94,10 @@ export const getServerMe = async (): Promise<User> => {
 
 export const checkSession = async () => {
   const cookieStore = await cookies();
-  const response = await apiServer.get("/auth/session", {
+  const response = await nextServer.get("/auth/session", {
     headers: {
       Cookie: cookieStore.toString(),
     },
   });
   return response;
-};
-
-export const fetchNoteById = async (id: string): Promise<Note> => {
-  const res = await apiServer.get<Note>(`/notes/${id}`);
-  return res.data;
 };

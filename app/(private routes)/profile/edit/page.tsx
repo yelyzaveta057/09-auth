@@ -1,60 +1,57 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useState } from "react";;
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+
+// API / STORE
 
 import { useAuthStore } from "../../../../lib/store/authStore";
+import { editProfile } from "../../../../lib/api/clientApi";
 
+// TYPES
+
+import { UpdateUserRequest } from "../../../../types/user";
+
+// MEDIA
 
 import css from "./EditProfilePage.module.css";
-import { editProfile } from "@/lib/api/serverApi";
-
-export type UpdateUserRequest = {
-  username: string;
-  email: string;
-  avatar: string;
-};
+import Image from "next/image";
 
 export default function EditPage() {
   const router = useRouter();
   const { user } = useAuthStore();
-  const setUser = useAuthStore((s) => s.setUser);
-
   const [error, setError] = useState("");
-  const [isPending, startTransition] = useTransition();
 
-  async function onEditAction(formData: FormData) {
-    setError("");
+  const setUser = useAuthStore((state) => state.setUser);
 
-    const username = String(formData.get("username") ?? "").trim();
-    const email = String(formData.get("email") ?? "").trim();
-    const avatar = String(formData.get("avatar") ?? "").trim();
-
-    const payload: UpdateUserRequest = { username, email, avatar };
-
+  const hundleEditProfile = async (formData: FormData) => {
     try {
-      const updated = await editProfile(payload);
+      const formValues = Object.fromEntries(formData) as UpdateUserRequest;
+      console.log(formValues);
 
-      if (!updated) {
-        setError("Failed to update profile.");
-        return;
+      const res = await editProfile(formValues);
+      // Виконуємо редірект або відображаємо помилку
+      if (res) {
+        setUser(res);
+
+        router.push("/profile");
+      } else {
+        setError("Invalid email or password");
       }
-
-      setUser(updated);
-      router.push("/profile");
-    } catch (e) {
-      console.error("editProfile error:", e);
-      setError("Failed to update profile.");
+    } catch (error) {
+      console.log("error", error);
+      setError("Invalid email or password");
     }
-  }
+  };
 
-  const handleCancel = () => router.back();
+const handleCancel = () => {
+router.back(); 
+};
 
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
-
+        <div className={css.avatar}>{/* <AvatarPicker /> */}</div>
         {user && (
           <Image
             src={user.avatar}
@@ -64,9 +61,12 @@ export default function EditPage() {
             className={css.avatar}
           />
         )}
-
         <form
-          action={(fd) => startTransition(() => onEditAction(fd))}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            await hundleEditProfile(formData);
+          }}
           className={css.profileInfo}
         >
           <div className={css.usernameWrapper}>
@@ -76,41 +76,23 @@ export default function EditPage() {
               name="username"
               type="text"
               className={css.input}
-              defaultValue={user?.username ?? ""}
+               placeholder={user?.username}
               required
             />
           </div>
 
-          <div className={css.usernameWrapper}>
-            <label htmlFor="email">Email:</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className={css.input}
-              defaultValue={user?.email ?? ""}
-              required
-            />
-          </div>
-
-          <input type="hidden" name="avatar" value={user?.avatar ?? ""} />
+          <p>Email: {user?.email}</p>
 
           <div className={css.actions}>
-            <button type="submit" className={css.saveButton} disabled={isPending}>
-              {isPending ? "Saving..." : "Save"}
+            <button type="submit" className={css.saveButton}>
+              Save
             </button>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className={css.cancelButton}
-              disabled={isPending}
-            >
-              Cancel
+            <button type="button" onClick={handleCancel} className={css.cancelButton}>
+                Cancel
             </button>
           </div>
         </form>
-
-        {error && <p role="alert" className={css.error}>{error}</p>}
+        {error && <p>{error}</p>}
       </div>
     </main>
   );

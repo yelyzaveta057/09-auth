@@ -29,4 +29,4 @@ clearDraft:() => set({draft:initialDraft}),
 },{
     name:'draft',
     partialize: (state) =>{return {draft:state.draft}}
-}))
+}));

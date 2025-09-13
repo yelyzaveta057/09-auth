@@ -1,5 +1,9 @@
-import { create } from "zustand";
-import { User } from "../../types/user";
+// lib/store/authStore.ts
+
+import { User } from '@/types/user';
+import { create } from 'zustand';
+
+
 
 type AuthStore = {
   isAuthenticated: boolean;
@@ -8,7 +12,7 @@ type AuthStore = {
   clearIsAuthenticated: () => void;
 };
 
-export const useAuthStore = create<AuthStore>()((set) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   user: null,
   setUser: (user: User) => {

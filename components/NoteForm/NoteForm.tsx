@@ -2,11 +2,11 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import css from "./NoteForm.module.css";
-import { ChangeEvent } from "react";
-import { useNoteDraft } from "../../lib/store/noteStore";
-import { createNote } from "../../lib/api/clientApi";
 
+import css from "./NoteForm.module.css";
+import { useNoteDraft } from "@/lib/store/noteStore";
+import { ChangeEvent } from "react";
+import { createNote } from "@/lib/api/clientApi";
 
 
 type NewNoteData = {

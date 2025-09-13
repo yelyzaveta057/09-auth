@@ -28,72 +28,32 @@ export const metadata: Metadata = {
 };
 
 const ProfilePage = async () => {
-  try {
-    const user = await getServerMe();
-    
-    if (!user) {
-      return (
-        <main className={css.mainContent}>
-          <div className={css.profileCard}>
-            <div className={css.header}>
-              <h1 className={css.formTitle}>Authentication Required</h1>
-            </div>
-            <div className={css.profileInfo}>
-              <p>Please sign in to view your profile.</p>
-              <Link href="/sign-in" className={css.editProfileButton}>
-                Sign In
-              </Link>
-            </div>
-          </div>
-        </main>
-      );
-    }
-    
-    return (
-      <main className={css.mainContent}>
-        <div className={css.profileCard}>
-          <div className={css.header}>
-            <h1 className={css.formTitle}>Profile Page</h1>
-            <Link href="profile/edit" className={css.editProfileButton}>
-              Edit Profile
-            </Link>
-          </div>
-          <div className={css.avatarWrapper}>
-            <Image
-              src={user.avatar}
-              alt="User Avatar"
-              width={120}
-              height={120}
-              className={css.avatar}
-            />
-          </div>
-          <div className={css.profileInfo}>
-            <p>Username: {user.username || "undefined"}</p>
-            <p>Email: {user.email || "undefined"}</p>
-          </div>
+  const user = await getServerMe();
+  return (
+    <main className={css.mainContent}>
+      <div className={css.profileCard}>
+        <div className={css.header}>
+          <h1 className={css.formTitle}>Profile Page</h1>
+          <Link href="profile/edit" className={css.editProfileButton}>
+            Edit Profile
+          </Link>
         </div>
-      </main>
-    );
-  } catch (error) {
-    
-    console.error("Profile page error:", error);
-    
-    return (
-      <main className={css.mainContent}>
-        <div className={css.profileCard}>
-          <div className={css.header}>
-            <h1 className={css.formTitle}>Authentication Required</h1>
-          </div>
-          <div className={css.profileInfo}>
-            <p>Please sign in to view your profile.</p>
-            <Link href="/sign-in" className={css.editProfileButton}>
-              Sign In
-            </Link>
-          </div>
+        <div className={css.avatarWrapper}>
+          <Image
+            src={user.avatar}
+            alt="User Avatar"
+            width={120}
+            height={120}
+            className={css.avatar}
+          />
         </div>
-      </main>
-    );
-  }
+        <div className={css.profileInfo}>
+          <p>Username: {user ? user.username : ""}</p>
+          <p>Email: {user ? user.email : "undefined"}</p>
+        </div>
+      </div>
+    </main>
+  );
 };
 
 export default ProfilePage;

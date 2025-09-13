@@ -1,12 +1,12 @@
-
 "use client";
-import css from "./Header.module.css";
-import React from "react";
-import Link from "next/link";
+
+import { useAuthStore } from "../../lib/store/authStore";
+
 import AuthNavigation from "../AuthNavigation/AuthNavigation";
 import { TagsMenu } from "../TagsMenu/TagsMenu";
-import { useAuthStore } from "@/lib/store/authStore";
+import css from "./Header.module.css";
 
+import Link from "next/link";
 
 const Header = () => {
   const { isAuthenticated } = useAuthStore();
@@ -42,4 +42,5 @@ const Header = () => {
     </header>
   );
 };
+
 export default Header;
