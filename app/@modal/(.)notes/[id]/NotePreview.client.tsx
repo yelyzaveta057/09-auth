@@ -6,7 +6,8 @@ import { useParams } from "next/navigation";
 
 import Modal from "../../../../components/Modal/Modal";
 import css from "./NotePreview.module.css"
-import { fetchNoteById } from "@/lib/api/clientApi";
+import { fetchNoteById } from "../../../../lib/api/clientApi";
+
 
 const NotePreview = () => {
   const router = useRouter();

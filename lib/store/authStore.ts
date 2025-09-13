@@ -1,7 +1,8 @@
 // lib/store/authStore.ts
 
-import { User } from '@/types/user';
+
 import { create } from 'zustand';
+import { User } from '../../types/user';
 
 
 

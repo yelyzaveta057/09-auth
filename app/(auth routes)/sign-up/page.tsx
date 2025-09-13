@@ -6,11 +6,13 @@
 // Додаємо імпорти
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { register,  } from '@/lib/api/clientApi';
+
 
 import css from "./SignUpPage.module.css"
-import { ApiError } from '@/app/api/api';
-import { RegisterRequest } from '@/types/user';
+import { RegisterRequest } from '../../../types/user';
+import { register } from '../../../lib/api/clientApi';
+import { ApiError } from '../../api/api';
+
 
 
 
