@@ -6,40 +6,33 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import css from "./SignInPage.module.css"
-import { LoginRequest } from '../../../types/user';
-import { ApiError } from '../../api/api';
-import { login } from '../../../lib/api/clientApi';
-
-
-
+import { login, LoginRequest } from '../../../lib/api/clientApi';
+import { useAuthStore } from '../../../lib/store/authStore';
 
 
 
 const SignIn = () => {
-  const router = useRouter();
-  const [error, setError] = useState('');
+  const router = useRouter();
+  const [error, setError] = useState("");
+  // Отримуємо метод із стора
+  const setUser = useAuthStore((state) => state.setUser);
 
-
-  const handleSubmit = async (formData: FormData) => {
-    try {
-	    // Типізуємо дані форми
-      const formValues = Object.fromEntries(formData) as LoginRequest;
-      // Виконуємо запит
-      const res = await login(formValues);
-      // Виконуємо редірект або відображаємо помилку
-      if (res) {
-        router.push('/profile');
-      } else {
-        setError('Invalid email or password');
-      }
-    } catch (error) {
-      setError(
-        (error as ApiError).response?.data?.erro ??
-          (error as ApiError).message ??
-          'Oops... some error'
-      )
-    }
-  };
+  const handleSubmit = async (formData: FormData) => {
+    try {
+      const formValues = Object.fromEntries(formData) as LoginRequest;
+      const res = await login(formValues);
+      if (res) {
+        // Записуємо користувача у глобальний стан
+        setUser(res);
+        router.push("/profile");
+      } else {
+        setError("Invalid email or password");
+      }
+    } catch (error) {
+      console.log("error", error);
+      setError("Invalid email or password");
+    }
+  };
   return (
     <main className={css.mainContent}>
  <form className={css.form} action={handleSubmit}>

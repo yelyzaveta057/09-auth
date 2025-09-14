@@ -9,39 +9,44 @@ import { useRouter } from 'next/navigation';
 
 
 import css from "./SignUpPage.module.css"
-import { RegisterRequest } from '../../../types/user';
+
 import { register } from '../../../lib/api/clientApi';
-import { ApiError } from '../../api/api';
+
+import { useAuthStore } from '../../../lib/store/authStore';
 
 
+export type RegisterRequest = {
+  email: string;
+  password?: string;
+  avatar?: string;
+  username: string;
+};
 
 
-const SignUp = () => {
+export default function SignUp() {
   const router = useRouter();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+
+  const setUser = useAuthStore((state) => state.setUser);
 
   const handleSubmit = async (formData: FormData) => {
     try {
-	    // Типізуємо дані форми
+      // Типізуємо дані форми
       const formValues = Object.fromEntries(formData) as RegisterRequest;
       // Виконуємо запит
-      const res = await register(formValues); 
+      const res = await register(formValues);
       // Виконуємо редірект або відображаємо помилку
       if (res) {
-       
-        router.push('/profile');
+        setUser(res);
+        router.push("/profile");
       } else {
-        setError('Invalid email or password');
+        setError("Invalid email or password");
       }
     } catch (error) {
-      setError(
-        (error as ApiError).response?.data?.erro ??
-          (error as ApiError).message ??
-          'Oops... some error'
-      )
+      console.log("error", error);
+      setError("Invalid email or password");
     }
   };
-
 
   return (
     <>
@@ -73,4 +78,3 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;

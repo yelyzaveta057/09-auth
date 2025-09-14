@@ -5,11 +5,7 @@ import { useRouter } from "next/navigation";
 // API / STORE
 
 import { useAuthStore } from "../../../../lib/store/authStore";
-import { editProfile } from "../../../../lib/api/clientApi";
-
-// TYPES
-
-import { UpdateUserRequest } from "../../../../types/user";
+import { editProfile, UpdateUserRequest } from "../../../../lib/api/clientApi";
 
 // MEDIA
 

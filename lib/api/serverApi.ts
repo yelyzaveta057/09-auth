@@ -9,8 +9,6 @@ interface NotesHttpResponse {
   totalPages: number;
 }
 
-
-
 export const getServerNotes = async (
   query: string,
   page: number,

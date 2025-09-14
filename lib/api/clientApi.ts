@@ -2,10 +2,23 @@
 
 import { nextServer } from "./api";
 import { NewNoteData, Note } from "../../types/note";
-import { CheckSessionRequest, LoginRequest, RegisterRequest, UpdateUserRequest, User } from "../../types/user";
+import {  User } from "../../types/user";
+import { RegisterRequest } from "../../app/(auth routes)/sign-up/page";
 
+export type CheckSessionRequest = {
+  success: boolean;
+};
 
+export type UpdateUserRequest = {
+  username: string;
+  email?: string;
+  avatar: string;
+};
 
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
 export interface NotesHttpResponse {
   notes: Note[];
   totalPages: number;
