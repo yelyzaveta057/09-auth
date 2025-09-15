@@ -2,12 +2,10 @@
 import { useState } from "react";;
 import { useRouter } from "next/navigation";
 
-// API / STORE
 
 import { useAuthStore } from "../../../../lib/store/authStore";
 import { editProfile, UpdateUserRequest } from "../../../../lib/api/clientApi";
 
-// MEDIA
 
 import css from "./EditProfilePage.module.css";
 import Image from "next/image";
@@ -19,7 +17,7 @@ export default function EditPage() {
 
   const setUser = useAuthStore((state) => state.setUser);
 
-  const hundleEditProfile = async (formData: FormData) => {
+  const handleEditProfile = async (formData: FormData) => {
     try {
       const formValues = Object.fromEntries(formData) as UpdateUserRequest;
       console.log(formValues);
@@ -57,14 +55,7 @@ router.back();
             className={css.avatar}
           />
         )}
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.currentTarget);
-            await hundleEditProfile(formData);
-          }}
-          className={css.profileInfo}
-        >
+        <form action={handleEditProfile} className={css.profileInfo}>
           <div className={css.usernameWrapper}>
             <label htmlFor="username">Username:</label>
             <input
@@ -72,7 +63,8 @@ router.back();
               name="username"
               type="text"
               className={css.input}
-               placeholder={user?.username}
+              defaultValue={user?.username ?? ""}
+              placeholder="Your username"
               required
             />
           </div>
@@ -84,7 +76,7 @@ router.back();
               Save
             </button>
             <button type="button" onClick={handleCancel} className={css.cancelButton}>
-                Cancel
+              Cancel
             </button>
           </div>
         </form>
